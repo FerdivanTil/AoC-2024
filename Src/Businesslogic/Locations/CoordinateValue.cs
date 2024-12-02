@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+﻿using System.Diagnostics;
 
 namespace Businesslogic.Locations
 {
     [DebuggerDisplay("Coordinate = {Coord}, Value = {Value}")]
-    public class CoordinateValue<T> : Coordinate
+    public class CoordinateValue<T>(int x, int y, T value) : Coordinate(x, y)
     {
-        public T Value { get; set; }
-        public CoordinateValue(int x, int y, T value) : base(x, y)
-        {
-            Value = value;
-        }
+        public T Value { get; set; } = value;
     }
 }

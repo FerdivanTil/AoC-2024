@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Businesslogic.Locations
+﻿namespace Businesslogic.Locations
 {
     public class Grid<T>
     {
         public List<List<T>> Lines { get; set; }
-
         public int SizeX { get; private set; }
         public int SizeY { get; private set; }
 
         public List<(int x, int y)> All { get; private set; }
 
-        public Grid()
-            {}
         public void Init(int sizeX, int sizeY, T value)
         {
             var init = Enumerable.Range(0, sizeY).Select(__ => Enumerable.Range(0, sizeX).Select(_ => value).ToList()).ToList();
@@ -29,6 +21,7 @@ namespace Businesslogic.Locations
             SizeY = Lines.Count;
             All = Enumerable.Range(0, SizeY).SelectMany(y => Enumerable.Range(0, SizeX).Select(x => (x, y))).ToList();
         }
+
         public bool Exists(int x, int y)
         {
             if (x < 0 || y < 0)
@@ -37,10 +30,12 @@ namespace Businesslogic.Locations
                 return false;
             return true;
         }
+
         public void UpdateValue(int x, int y, T value)
         {
             Lines[y][x] = value;
         }
+
         public void UpdateValue(int x, int y, Func<T,T> update)
         {
             Lines[y][x] = update(Lines[y][x]);
@@ -80,20 +75,36 @@ namespace Businesslogic.Locations
 
         public List<CoordinateValue<T>> GetRow(int y)
         {
-            return Enumerable.Range(0, SizeX).Select(x => GetCoordinateValue(x,y))
-            .ToList();
+            return Enumerable.Range(0, SizeX)
+                .Select(x => GetCoordinateValue(x,y))
+                .ToList();
         }
 
         public List<CoordinateValue<T>> GetColum(int x)
         {
-            return Enumerable.Range(0, SizeY).Select(y => GetCoordinateValue(x, y))
-            .ToList();
+            return Enumerable.Range(0, SizeY)
+                .Select(y => GetCoordinateValue(x, y))
+                .ToList();
         }
+
         public CoordinateValue<T> GetCoordinateValue(int x, int y)
         {
             if (!Exists(x, y))
+            {
                 return null;
+            }
             return new CoordinateValue<T>(x, y, Lines[y][x]);
+        }
+
+        public void ToConsole()
+        {
+            var table = new Table();
+            foreach (var line in Lines)
+            {
+                table.AddRow(line.Select(i => i.ToString()).ToArray());
+            }
+
+            AnsiConsole.Write(table);
         }
     }
 }

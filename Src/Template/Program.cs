@@ -1,24 +1,36 @@
-﻿using Businesslogic;
-
-namespace Template
+﻿namespace Template
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        public static int Test1SampleResult = 0;
+        public static int Test2SampleResult = 0;
+
+        static void Main()
         {
-            Helper.WriteResult(Test1, FileType.Test1Sample, 0);
-            //Helper.WriteResult(Test1, FileType.Test1);
-            //Helper.WriteResult(Test2, FileType.Test2Sample);
-            //Helper.WriteResult(Test2, FileType.Test2);
+            switch (FileType.Test1Sample)
+            {
+                case FileType.Test1Sample:
+                    Helper.WriteResult(Test1, FileType.Test1Sample, Test1SampleResult);
+                    break;
+                case FileType.Test1:
+                    Helper.WriteResult(Test1, FileType.Test1);
+                    break;
+                case FileType.Test2Sample:
+                    Helper.WriteResult(Test2, FileType.Test2Sample, Test2SampleResult);
+                    break;
+                case FileType.Test2:
+                    Helper.WriteResult(Test2, FileType.Test2);
+                    break;
+            }
         }
 
-        private static int Test1(List<string> input)
+        internal static int Test1(List<string> input)
         {
             throw new NotImplementedException();
             return 0;
         }
 
-        private static int Test2(List<string> input)
+        internal static int Test2(List<string> input)
         {
             throw new NotImplementedException();
             return 0;

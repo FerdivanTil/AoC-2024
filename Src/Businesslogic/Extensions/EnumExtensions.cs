@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Businesslogic.Extensions
+﻿namespace Businesslogic.Extensions
 {
     public static class EnumExtensions
     {
@@ -14,7 +9,7 @@ namespace Businesslogic.Extensions
         /// <param name="enumVal">The enum value</param>
         /// <returns>The attribute of type T that exists on the enum value</returns>
         /// <example><![CDATA[string desc = myEnumVariable.GetAttributeOfType<DescriptionAttribute>().Description;]]></example>
-        public static T GetAttributeOfType<T>(this Enum enumVal) where T : System.Attribute
+        public static T GetAttributeOfType<T>(this Enum enumVal) where T : Attribute
         {
             var type = enumVal.GetType();
             var memInfo = type.GetMember(enumVal.ToString());
