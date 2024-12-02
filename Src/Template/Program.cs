@@ -26,7 +26,6 @@
 
         internal static int Test1(List<string> input)
         {
-            throw new NotImplementedException();
             return 0;
         }
 

@@ -3,11 +3,13 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-      <StartupObject>Template.Program</StartupObject>
+    <StartupObject>Day2.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include=".template.config\template.json" />
+    <Compile Remove=".day2.config\**" />
+    <EmbeddedResource Remove=".day2.config\**" />
+    <None Remove=".day2.config\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,8 +19,8 @@
     <PackageReference Include="Spectre.Console" Version="0.49.1" />
     <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 

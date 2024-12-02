@@ -22,7 +22,7 @@ namespace Businesslogic
         public static void WriteResult(Func<List<string>, string> func, FileType fileType, string result)
         {
             var result1Test = func(GetFileContents(fileType));
-            AnsiConsole.WriteLine($"Result of {fileType} is: [red]{result1Test}[/]");
+            AnsiConsole.MarkupLine($"Result of {fileType} is: [red]{result1Test}[/]");
             if (result == "0")
             {
                 return;
@@ -32,7 +32,7 @@ namespace Businesslogic
             resultString.Append(result).Append(" == ").Append(result1Test);
             resultString.Append(result == result1Test ? " [lime]CORRECT[/]" : " [red]INCORRECT[/]");
 
-            AnsiConsole.WriteLine($"Result of {fileType} is: {resultString}");
+            AnsiConsole.MarkupLine($"Result of {fileType} is: {resultString}");
         }
 
         public static void WriteResult(Func<List<string>, long> func, FileType fileType, int result = 0)
