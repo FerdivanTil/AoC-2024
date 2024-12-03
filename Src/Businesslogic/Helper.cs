@@ -1,6 +1,7 @@
 ﻿using Businesslogic.Attributes;
 using Businesslogic.Enums;
 using Businesslogic.Extensions;
+using System.Diagnostics;
 using System.Text;
 
 namespace Businesslogic
@@ -37,7 +38,11 @@ namespace Businesslogic
 
         public static void WriteResult(Func<List<string>, long> func, FileType fileType, int result = 0)
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             WriteResult((x) => func(x).ToString(), fileType, result.ToString());
+            stopwatch.Stop();
+            AnsiConsole.MarkupLine($"Result took [aqua]{stopwatch.ElapsedMilliseconds}[/] ms");
         }
     }
 }
