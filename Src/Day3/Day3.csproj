@@ -3,8 +3,14 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-      <StartupObject>Template.Program</StartupObject>
+      <StartupObject>Day3.Program</StartupObject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove=".day3.config\**" />
+    <EmbeddedResource Remove=".day3.config\**" />
+    <None Remove=".day3.config\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.12.2" />

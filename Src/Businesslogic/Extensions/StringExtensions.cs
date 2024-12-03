@@ -17,5 +17,11 @@
         {
             return int.TryParse(str, out _);
         }
+
+        public static int GetInt(this string str)
+        {
+            int.TryParse(str, out var output);
+            return output;
+        }
     }
 }
