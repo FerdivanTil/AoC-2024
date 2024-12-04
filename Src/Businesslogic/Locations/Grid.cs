@@ -64,12 +64,21 @@
                          }.Where(i => i != null).ToList();
         }
 
-        public List<CoordinateValue<T>> GetAdjoiningCross(int x, int y)
+        public List<CoordinateValue<T>> GetAdjoiningPlus(int x, int y)
         {
             return new[] { GetCoordinateValue(x, y - 1), // Top
                            GetCoordinateValue(x + 1, y), // Right
                            GetCoordinateValue(x, y + 1),  // Bottom
                            GetCoordinateValue(x - 1, y), // Left
+                         }.Where(i => i != null).ToList();
+        }
+
+        public List<CoordinateValue<T>> GetAdjoiningCross(int x, int y)
+        {
+            return new[] { GetCoordinateValue(x + 1, y - 1), // Top Right
+                           GetCoordinateValue(x + 1, y + 1), // Bottom Right
+                           GetCoordinateValue(x - 1, y + 1), // Bottom Left
+                           GetCoordinateValue(x - 1, y - 1), // Top Left
                          }.Where(i => i != null).ToList();
         }
 
