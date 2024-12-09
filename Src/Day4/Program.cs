@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using Businesslogic.Locations;
 
 namespace Day4
 {
@@ -29,16 +29,10 @@ namespace Day4
         internal static int Test1(List<string> input)
         {
             var result = 0;
-            var grid = new Businesslogic.Locations.Grid<char>();
-            grid.Parse(input.Select(i => i.ToList()).ToList());
-            foreach (var coord in grid.All)
+            var grid = new Grid<char>(input.ConvertAll(i => i.ToList()));
+            foreach (var coord in grid.GetCoordinatesFiltered(i => i == 'X'))
             {
-                var cell = grid.GetValue(coord.x, coord.y);
-                if (cell != 'X')
-                {
-                    continue;
-                }
-                var ajoining = grid.GetAdjoiningAll(coord.x, coord.y).Where(i => i.Value == 'M');
+                var ajoining = grid.GetDirections(coord.X, coord.Y, Direction.All).Where(i => i.Value == 'M');
 
                 if (!ajoining.Any())
                 {
@@ -47,10 +41,10 @@ namespace Day4
 
                 foreach (var item in ajoining)
                 {
-                    AnsiConsole.MarkupLine($"Found ajoining X at [red]{coord.y},{coord.x}[/]");
+                    AnsiConsole.MarkupLine($"Found ajoining X at [red]{coord.Y},{coord.X}[/]");
                     AnsiConsole.MarkupLine($"Found ajoining M at [red]{item.Y},{item.X}[/]");
-                    var directionX = item.X - coord.x;
-                    var directionY = item.Y - coord.y;
+                    var directionX = item.X - coord.X;
+                    var directionY = item.Y - coord.Y;
                     if (!grid.Exists(item.X + directionX, item.Y + directionY) || !grid.Exists(item.X + directionX * 2, item.Y + directionY * 2))
                     {
                         continue;
@@ -75,19 +69,18 @@ namespace Day4
         internal static int Test2(List<string> input)
         {
             var result = 0;
-            var grid = new Businesslogic.Locations.Grid<char>();
-            grid.Parse(input.Select(i => i.ToList()).ToList());
+            var grid = new Businesslogic.Locations.Grid<char>(input.ConvertAll(i => i.ToList()));
             foreach (var coord in grid.All)
             {
                 // Get the middle of the cross
-                var cell = grid.GetValue(coord.x, coord.y);
+                var cell = grid.GetValue(coord.X, coord.Y);
                 if (cell != 'A')
                 {
                     continue;
                 }
-                AnsiConsole.MarkupLine($"Found ajoining A at [red]{coord.y},{coord.x}[/]");
+                AnsiConsole.MarkupLine($"Found ajoining A at [red]{coord.Y},{coord.X}[/]");
 
-                var ajoining = grid.GetAdjoiningCross(coord.x, coord.y);
+                var ajoining = grid.GetDirections(coord.X, coord.Y, Direction.Cross);
 
                 // A cross should contain two M and two S
                 if (ajoining.Count(i => i.Value == 'M') != 2 || ajoining.Count(i => i.Value == 'S') != 2)
@@ -108,10 +101,10 @@ namespace Day4
 
                 // Make sure that one M has an opposite with a S
                 var firstM = ajoining.First(i => i.Value == 'M');
-                var directionX = (firstM.X - coord.x) * -1;
-                var directionY = (firstM.Y - coord.y) * -1;
-                var opposite = grid.GetValue(coord.x + directionX, coord.y + directionY);
-                AnsiConsole.MarkupLine($"Found ajoining {opposite} at [red]{coord.y + directionY},{coord.x + directionX}[/]");
+                var directionX = (firstM.X - coord.X) * -1;
+                var directionY = (firstM.Y - coord.Y) * -1;
+                var opposite = grid.GetValue(coord.X + directionX, coord.Y + directionY);
+                AnsiConsole.MarkupLine($"Found ajoining {opposite} at [red]{coord.Y + directionY},{coord.X + directionX}[/]");
                 if (opposite != 'S')
                 {
                     AnsiConsole.MarkupLine($"[purple]NO MAS found[/]");

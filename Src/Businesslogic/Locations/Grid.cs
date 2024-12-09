@@ -1,25 +1,33 @@
-﻿namespace Businesslogic.Locations
+﻿using Businesslogic.Attributes;
+using Businesslogic.Enums;
+
+namespace Businesslogic.Locations
 {
     public class Grid<T>
     {
-        public List<List<T>> Lines { get; set; }
+        public List<List<T>> Lines { get; private set; }
         public int SizeX { get; private set; }
         public int SizeY { get; private set; }
 
-        public List<(int x, int y)> All { get; private set; }
+        public List<Coordinate> All { get; private set; }
 
-        public void Init(int sizeX, int sizeY, T value)
+        public Grid(int sizeX, int sizeY, T value)
         {
             var init = Enumerable.Range(0, sizeY).Select(__ => Enumerable.Range(0, sizeX).Select(_ => value).ToList()).ToList();
             Parse(init);
         }
 
-        public void Parse(List<List<T>> input)
+        public Grid(List<List<T>> input)
+        {
+            Parse(input);
+        }
+
+        protected void Parse(List<List<T>> input)
         {
             Lines = input;
             SizeX = Lines[0].Count;
             SizeY = Lines.Count;
-            All = Enumerable.Range(0, SizeY).SelectMany(y => Enumerable.Range(0, SizeX).Select(x => (x, y))).ToList();
+            All = Enumerable.Range(0, SizeY).SelectMany(y => Enumerable.Range(0, SizeX).Select(x => new Coordinate(x, y))).ToList();
         }
 
         public bool Exists(int x, int y)
@@ -46,40 +54,15 @@
             return Lines[y][x];
         }
 
-        public List<(int x,int y)> GetCoordinatesFiltered(Func<T,bool> filter)
+        public List<Coordinate> GetCoordinatesFiltered(Func<T,bool> filter)
         {
-            return All.Where(i => filter(Lines[i.y][i.x])).ToList();
+            return All.Where(i => filter(Lines[i.Y][i.X])).ToList();
         }
 
-        public List<CoordinateValue<T>> GetAdjoiningAll(int x, int y)
+        public List<CoordinateValue<T>> GetDirections(int x, int y, Direction direction)
         {
-            return new[] { GetCoordinateValue(x, y - 1), // Top
-                           GetCoordinateValue(x + 1, y - 1), // Top Right
-                           GetCoordinateValue(x + 1, y), // Right
-                           GetCoordinateValue(x + 1, y + 1), // Bottom Right
-                           GetCoordinateValue(x, y + 1),  // Bottom
-                           GetCoordinateValue(x - 1, y + 1), // Bottom Left
-                           GetCoordinateValue(x - 1, y), // Left
-                           GetCoordinateValue(x - 1, y - 1), // Top Left
-                         }.Where(i => i != null).ToList();
-        }
-
-        public List<CoordinateValue<T>> GetAdjoiningPlus(int x, int y)
-        {
-            return new[] { GetCoordinateValue(x, y - 1), // Top
-                           GetCoordinateValue(x + 1, y), // Right
-                           GetCoordinateValue(x, y + 1),  // Bottom
-                           GetCoordinateValue(x - 1, y), // Left
-                         }.Where(i => i != null).ToList();
-        }
-
-        public List<CoordinateValue<T>> GetAdjoiningCross(int x, int y)
-        {
-            return new[] { GetCoordinateValue(x + 1, y - 1), // Top Right
-                           GetCoordinateValue(x + 1, y + 1), // Bottom Right
-                           GetCoordinateValue(x - 1, y + 1), // Bottom Left
-                           GetCoordinateValue(x - 1, y - 1), // Top Left
-                         }.Where(i => i != null).ToList();
+            var attributes = direction.GetFlags().Select(i => i.GetAttribute<DirectionAttribute>()).Where(i => i != null).ToList();
+            return attributes.ConvertAll(i => GetCoordinateValue(x + i.X, y + i.Y)).Where(i => i != null).ToList();
         }
 
         public List<CoordinateValue<T>> GetRow(int y)

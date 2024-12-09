@@ -22,10 +22,14 @@ namespace Businesslogic
 
         public static void WriteResult(Func<List<string>, string> func, FileType fileType, string result)
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             var result1Test = func(GetFileContents(fileType));
+            stopwatch.Stop();
             AnsiConsole.MarkupLine($"Result of {fileType} is: [red]{result1Test}[/]");
             if (result == "0")
             {
+                AnsiConsole.MarkupLine($"Result took [aqua]{stopwatch.ElapsedMilliseconds}[/] ms");
                 return;
             }
 
