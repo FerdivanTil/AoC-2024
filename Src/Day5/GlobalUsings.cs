@@ -1,0 +1,11 @@
+﻿global using System;
+global using System.Collections.Generic;
+global using System.Drawing;
+global using System.Linq;
+global using Businesslogic;
+global using Businesslogic.Attributes;
+global using Businesslogic.Enums;
+global using Businesslogic.Extensions;
+global using FluentAssertions;
+global using Spectre.Console;
+global using Xunit;
